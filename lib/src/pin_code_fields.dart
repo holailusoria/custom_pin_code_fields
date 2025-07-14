@@ -135,7 +135,7 @@ class PinCodeTextField extends StatefulWidget {
   /// Whether to show a confirmation dialog before pasting or not (defaults to true).
   final bool showPasteConfirmationDialog;
 
-  final Widget Function(BuildContext context, String pastedText)? dialog;
+  final Widget Function(BuildContext context, String pastedText, VoidCallback onConfirmPaste)? dialog;
 
   /// Theme for the pin cells. Read more [PinTheme]
   final PinTheme pinTheme;
@@ -784,8 +784,16 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
                     if (widget.dialog != null) {
                       showDialog(
                         context: context,
-                        builder: (_) => widget.dialog!(context, pastedText),
+                        builder: (_) => widget.dialog!(
+                          context,
+                          data!.text!,
+                              () {
+                            _paste(data.text!);
+                          },
+                        ),
                       );
+                    } else {
+                      _paste(data!.text!);
                     }
                   }
                 }
