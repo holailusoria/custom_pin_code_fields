@@ -775,17 +775,17 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
                 },
                 onLongPress: widget.enabled
                     ? () async {
-                  var data = await Clipboard.getData("text/plain");
-                  if (data?.text?.isNotEmpty ?? false) {
-                    if (widget.beforeTextPaste?.call(data!.text) ?? true) {
-                      if (widget.dialog != null) {
-                        showDialog(
-                          context: context,
-                          builder: (_) => widget.dialog!(context, data!.text!),
-                        );
-                      } else {
-                        _paste(data!.text!);
-                      }
+                  final data = await Clipboard.getData("text/plain");
+                  final pastedText = data?.text;
+
+                  if (pastedText?.isNotEmpty ?? false) {
+                    _paste(pastedText!);
+
+                    if (widget.dialog != null) {
+                      showDialog(
+                        context: context,
+                        builder: (_) => widget.dialog!(context, pastedText),
+                      );
                     }
                   }
                 }
